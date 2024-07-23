@@ -472,7 +472,7 @@ const handleChangeBackground = (color: string) => {
 }
 
 const openUploadImage = (isUploadBanner: boolean) => {
-  if (!isEditable || !isEeUI) return
+  if (!isEditable) return
 
   imageCropperData.value.uploadConfig = {
     path: [NOCO, base.value.id, meta.value?.id, formViewData.value?.id].join('/'),
@@ -803,30 +803,21 @@ useEventListener(
                     />
                     <div class="absolute bottom-0 right-0 hidden group-hover:block">
                       <div class="flex items-center space-x-1 m-2">
-                        <NcTooltip :disabled="isEeUI">
-                          <template #title>
-                            <div class="text-center">
-                              {{ $t('msg.info.thisFeatureIsOnlyAvailableInEnterpriseEdition') }}
-                            </div>
-                          </template>
-
-                          <NcButton
-                            type="secondary"
-                            size="small"
-                            class="nc-form-upload-banner-btn"
-                            data-testid="nc-form-upload-banner-btn"
-                            :disabled="!isEeUI"
-                            @click="openUploadImage(true)"
-                          >
-                            <div class="flex gap-2 items-center">
-                              <component :is="iconMap.upload" class="w-4 h-4" />
-                              <span>
-                                {{ formViewData.banner_image_url ? $t('general.replace') : $t('general.upload') }}
-                                {{ $t('general.banner') }}
-                              </span>
-                            </div>
-                          </NcButton>
-                        </NcTooltip>
+                        <NcButton
+                          type="secondary"
+                          size="small"
+                          class="nc-form-upload-banner-btn"
+                          data-testid="nc-form-upload-banner-btn"
+                          @click="openUploadImage(true)"
+                        >
+                          <div class="flex gap-2 items-center">
+                            <component :is="iconMap.upload" class="w-4 h-4" />
+                            <span>
+                              {{ formViewData.banner_image_url ? $t('general.replace') : $t('general.upload') }}
+                              {{ $t('general.banner') }}
+                            </span>
+                          </div>
+                        </NcButton>
                         <NcTooltip v-if="isEeUI && formViewData.banner_image_url">
                           <template #title> {{ $t('general.delete') }} {{ $t('general.banner') }} </template>
                           <NcButton
@@ -882,27 +873,19 @@ useEventListener(
                               class="items-center space-x-1 flex-nowrap m-3"
                               :class="formViewData.logo_url ? 'hidden absolute top-0 left-0 group-hover:flex' : 'flex'"
                             >
-                              <NcTooltip :disabled="isEeUI">
-                                <template #title>
-                                  <div class="text-center">
-                                    {{ $t('msg.info.thisFeatureIsOnlyAvailableInEnterpriseEdition') }}
-                                  </div>
-                                </template>
-                                <NcButton
-                                  v-if="isEditable"
-                                  type="secondary"
-                                  size="small"
-                                  class="nc-form-upload-logo-btn"
-                                  data-testid="nc-form-upload-log-btn"
-                                  :disabled="!isEeUI"
-                                  @click="openUploadImage(false)"
-                                >
-                                  <div class="flex gap-2 items-center">
-                                    <component :is="iconMap.upload" class="w-4 h-4" />
-                                    <span> {{ formViewData.logo_url ? $t('general.replace') : $t('general.upload') }} Logo</span>
-                                  </div>
-                                </NcButton>
-                              </NcTooltip>
+                              <NcButton
+                                v-if="isEditable"
+                                type="secondary"
+                                size="small"
+                                class="nc-form-upload-logo-btn"
+                                data-testid="nc-form-upload-log-btn"
+                                @click="openUploadImage(false)"
+                              >
+                                <div class="flex gap-2 items-center">
+                                  <component :is="iconMap.upload" class="w-4 h-4" />
+                                  <span> {{ formViewData.logo_url ? $t('general.replace') : $t('general.upload') }} Logo</span>
+                                </div>
+                              </NcButton>
                               <NcTooltip v-if="isEeUI && formViewData.logo_url">
                                 <template #title> {{ $t('general.delete') }} {{ $t('general.logo') }} </template>
                                 <NcButton
@@ -1522,36 +1505,6 @@ useEventListener(
                             </div>
                           </div>
 
-                          <div class="flex items-center justify-between gap-3">
-                            <!-- Hide NocoDB Branding -->
-
-                            <span>{{ $t('labels.hideNocodbBranding') }}</span>
-
-                            <a-switch
-                              v-if="isEeUI"
-                              v-e="[`a:form-view:hide-branding`]"
-                              :checked="parseProp(formViewData.meta)?.hide_branding"
-                              size="small"
-                              class="nc-form-hide-branding"
-                              data-testid="nc-form-hide-branding"
-                              :disabled="isLocked || !isEditable"
-                              @change="(value) => {
-                                  if (isLocked || !isEditable) return
-
-                                  (formViewData!.meta as Record<string,any>).hide_branding = value
-                                  updateView()
-                                }"
-                            />
-
-                            <NcTooltip v-else placement="top">
-                              <template #title>
-                                <div class="text-center">
-                                  {{ $t('msg.info.thisFeatureIsOnlyAvailableInEnterpriseEdition') }}
-                                </div>
-                              </template>
-                              <a-switch :checked="false" size="small" :disabled="true" />
-                            </NcTooltip>
-                          </div>
                           <div class="flex items-center justify-between gap-3">
                             <!-- Hide Banner -->
                             <span>{{ $t('general.hide') }} {{ $t('general.banner') }}</span>

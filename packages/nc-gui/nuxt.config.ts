@@ -20,6 +20,11 @@ export default defineNuxtConfig({
     },
   },
   spaLoadingTemplate: false,
+  devServer: {
+    https: true,
+    port: 4000, // default: 3000
+    host: 'localhost', // deafult: 'localhost'
+  },
   app: {
     pageTransition: process.env.NUXT_PAGE_TRANSITION_DISABLE
       ? false
